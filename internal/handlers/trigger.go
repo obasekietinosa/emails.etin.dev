@@ -53,5 +53,17 @@ func TriggerEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Log to database
+	logEntry := models.EmailLog{
+		UserID:    template.UserID,
+		Recipient: to,
+		Subject:   template.Subject,
+		Status:    "sent",
+		Mode:      "managed",
+	}
+	go func() {
+		database.DB.Create(&logEntry)
+	}()
+
 	JSON(w, http.StatusOK, map[string]string{"status": "sent"})
 }

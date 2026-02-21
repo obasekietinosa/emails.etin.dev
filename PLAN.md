@@ -8,7 +8,7 @@ This project aims to build a managed email service with two modes of operation:
 ## Technology Stack
 -   **Backend**: Go (Golang)
 -   **Frontend**: React TypeScript
--   **Database**: PostgreSQL (via GORM). Supports SQLite for local development.
+-   **Database**: PostgreSQL (via GORM). All environments (Dev/Prod) use Postgres.
 -   **API Framework**: Chi
 -   **Authentication**: JWT (for Web Client), API Keys (for Headless Mode)
 
@@ -25,7 +25,7 @@ This project aims to build a managed email service with two modes of operation:
 
 #### 2. Database & Models
 -   [x] Define Models: `User`, `Template`, `ApiKey`, `EmailLog`.
--   [x] Setup Database connection (PostgreSQL/SQLite) and Auto-migration.
+-   [x] Setup PostgreSQL connection.
 
 #### 3. Core Services
 -   [x] **Auth Service**: JWT generation and validation.

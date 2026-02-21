@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/tinrab/emails/internal/database"
 	"github.com/tinrab/emails/internal/middleware"
+	"github.com/tinrab/emails/internal/models"
 	"github.com/tinrab/emails/internal/service"
 )
 
@@ -36,7 +38,18 @@ func SendEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// We could log this to database here
-	// For now, just return success
+	// Log to database
+	logEntry := models.EmailLog{
+		UserID:    userID,
+		Recipient: input.To,
+		Subject:   input.Subject,
+		Status:    "sent",
+		Mode:      "headless",
+	}
+	// Best effort logging, don't fail request if logging fails
+	go func() {
+		database.DB.Create(&logEntry)
+	}()
+
 	JSON(w, http.StatusOK, map[string]interface{}{"status": "sent", "user_id": userID})
 }
