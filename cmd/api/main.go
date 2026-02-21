@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"egogo/internal/database"
 	"egogo/internal/handlers"
 	"egogo/internal/middleware"
@@ -22,6 +23,16 @@ func main() {
 	r.Use(chiMiddleware.Logger)
 	r.Use(chiMiddleware.Recoverer)
 
+	// Basic CORS
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
+
 	authHandler := &handlers.AuthHandler{}
 
 	r.Post("/register", authHandler.Register)
@@ -31,12 +42,15 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.JWTAuth)
 		r.Post("/api-keys", handlers.GenerateAPIKey)
+		r.Get("/api-keys", handlers.ListAPIKeys)
 
 		r.Get("/templates", handlers.ListTemplates)
 		r.Post("/templates", handlers.CreateTemplate)
 		r.Get("/templates/{id}", handlers.GetTemplate)
 		r.Put("/templates/{id}", handlers.UpdateTemplate)
 		r.Delete("/templates/{id}", handlers.DeleteTemplate)
+
+		r.Get("/logs", handlers.GetEmailLogs)
 	})
 
 	r.Group(func(r chi.Router) {
