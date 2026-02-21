@@ -8,7 +8,7 @@ This project aims to build a managed email service with two modes of operation:
 ## Technology Stack
 -   **Backend**: Go (Golang)
 -   **Frontend**: React TypeScript
--   **Database**: SQLite (via GORM)
+-   **Database**: PostgreSQL (via GORM). Supports SQLite for local development.
 -   **API Framework**: Chi
 -   **Authentication**: JWT (for Web Client), API Keys (for Headless Mode)
 
@@ -19,45 +19,26 @@ This project aims to build a managed email service with two modes of operation:
 ### Phase 1: Backend API (Go)
 
 #### 1. Initialization
--   [ ] Initialize Go module `github.com/tinrab/emails` (or similar).
--   [ ] Set up directory structure:
-    -   `cmd/api`: Main application entry point.
-    -   `internal/database`: Database connection and GORM setup.
-    -   `internal/handlers`: HTTP request handlers.
-    -   `internal/models`: Database models.
-    -   `internal/service`: Business logic (Auth, Email).
-    -   `internal/middleware`: Custom middleware (Auth).
+-   [x] Initialize Go module `github.com/tinrab/emails`.
+-   [x] Set up directory structure.
+-   [x] Install dependencies.
 
 #### 2. Database & Models
--   [ ] Define Models:
-    -   `User`: ID, Email, PasswordHash.
-    -   `Template`: ID, UserID, Name, Subject, Body, TriggerToken.
-    -   `ApiKey`: ID, UserID, Key, Name.
-    -   `EmailLog`: ID, UserID, Recipient, Subject, Status, Mode.
--   [ ] Setup SQLite connection and Auto-migration.
+-   [x] Define Models: `User`, `Template`, `ApiKey`, `EmailLog`.
+-   [x] Setup Database connection (PostgreSQL/SQLite) and Auto-migration.
 
 #### 3. Core Services
--   [ ] **Auth Service**: JWT generation and validation.
--   [ ] **Email Service**: Interface `EmailSender` with a `MockSender` implementation that logs to stdout.
+-   [x] **Auth Service**: JWT generation and validation.
+-   [x] **Email Service**: Interface `EmailSender` with `MockSender` implementation.
 
 #### 4. API Endpoints
--   [ ] **Authentication**:
-    -   `POST /register`: User registration.
-    -   `POST /login`: User login (returns JWT).
--   [ ] **Managed Mode (Templates)**:
-    -   `GET /templates`: List user templates.
-    -   `POST /templates`: Create a new template.
-    -   `GET /templates/{id}`: Get template details.
-    -   `PUT /templates/{id}`: Update template.
-    -   `DELETE /templates/{id}`: Delete template.
-    -   `POST /trigger/{token}`: Trigger an email from a template (public/unauthenticated or token-based).
--   [ ] **Headless Mode**:
-    -   `POST /send`: Send raw email (Protected by API Key).
-    -   `POST /api-keys`: Generate API Key (Protected by JWT).
+-   [x] **Authentication**: `/register`, `/login`.
+-   [x] **Managed Mode**: Template CRUD, Trigger endpoint.
+-   [x] **Headless Mode**: `/send` endpoint, API Key generation.
 
 #### 5. Middleware
--   [ ] **JWT Middleware**: Protects web client endpoints.
--   [ ] **API Key Middleware**: Protects headless mode endpoints.
+-   [x] **JWT Middleware**: Protects web client endpoints.
+-   [x] **API Key Middleware**: Protects headless mode endpoints.
 
 ---
 
