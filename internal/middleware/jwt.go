@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/my-org/emails-service/internal/service"
+	"egogo/internal/service"
 )
 
 type contextKey string

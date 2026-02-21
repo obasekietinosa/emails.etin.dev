@@ -1,4 +1,4 @@
-module github.com/my-org/emails-service
+module egogo
 
 go 1.24.3
 

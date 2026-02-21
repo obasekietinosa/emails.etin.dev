@@ -5,9 +5,9 @@ import (
 	"encoding/hex"
 	"net/http"
 
-	"github.com/my-org/emails-service/internal/database"
-	"github.com/my-org/emails-service/internal/middleware"
-	"github.com/my-org/emails-service/internal/models"
+	"egogo/internal/database"
+	"egogo/internal/middleware"
+	"egogo/internal/models"
 )
 
 func GenerateAPIKey(w http.ResponseWriter, r *http.Request) {

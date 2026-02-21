@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/my-org/emails-service/internal/database"
-	"github.com/my-org/emails-service/internal/models"
+	"egogo/internal/database"
+	"egogo/internal/models"
 )
 
 func APIKeyAuth(next http.Handler) http.Handler {

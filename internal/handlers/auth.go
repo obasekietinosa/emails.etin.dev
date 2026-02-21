@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/my-org/emails-service/internal/database"
-	"github.com/my-org/emails-service/internal/models"
-	"github.com/my-org/emails-service/internal/service"
+	"egogo/internal/database"
+	"egogo/internal/models"
+	"egogo/internal/service"
 	"golang.org/x/crypto/bcrypt"
 )
 

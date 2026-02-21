@@ -6,7 +6,7 @@ import (
 	"log"
 	"text/template"
 
-	"github.com/my-org/emails-service/internal/models"
+	"egogo/internal/models"
 )
 
 type EmailSender interface {

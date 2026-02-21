@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/my-org/emails-service/internal/database"
-	"github.com/my-org/emails-service/internal/middleware"
-	"github.com/my-org/emails-service/internal/models"
-	"github.com/my-org/emails-service/internal/service"
+	"egogo/internal/database"
+	"egogo/internal/middleware"
+	"egogo/internal/models"
+	"egogo/internal/service"
 )
 
 func SendEmail(w http.ResponseWriter, r *http.Request) {

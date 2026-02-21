@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/my-org/emails-service/internal/models"
+	"egogo/internal/models"
 )
 
 type AuthClaims struct {
