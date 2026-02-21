@@ -7,9 +7,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
-	"github.com/tinrab/emails/internal/database"
-	"github.com/tinrab/emails/internal/middleware"
-	"github.com/tinrab/emails/internal/models"
+	"github.com/my-org/emails-service/internal/database"
+	"github.com/my-org/emails-service/internal/middleware"
+	"github.com/my-org/emails-service/internal/models"
 )
 
 func ListTemplates(w http.ResponseWriter, r *http.Request) {

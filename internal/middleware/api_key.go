@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tinrab/emails/internal/database"
-	"github.com/tinrab/emails/internal/models"
+	"github.com/my-org/emails-service/internal/database"
+	"github.com/my-org/emails-service/internal/models"
 )
 
 func APIKeyAuth(next http.Handler) http.Handler {

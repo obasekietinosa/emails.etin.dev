@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/tinrab/emails/internal/service"
+	"github.com/my-org/emails-service/internal/service"
 )
 
 type contextKey string

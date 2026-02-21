@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/tinrab/emails/internal/database"
-	"github.com/tinrab/emails/internal/models"
-	"github.com/tinrab/emails/internal/service"
+	"github.com/my-org/emails-service/internal/database"
+	"github.com/my-org/emails-service/internal/models"
+	"github.com/my-org/emails-service/internal/service"
 )
 
 func TriggerEmail(w http.ResponseWriter, r *http.Request) {

@@ -19,7 +19,7 @@ This project aims to build a managed email service with two modes of operation:
 ### Phase 1: Backend API (Go)
 
 #### 1. Initialization
--   [x] Initialize Go module `github.com/tinrab/emails`.
+-   [x] Initialize Go module `github.com/my-org/emails-service`.
 -   [x] Set up directory structure.
 -   [x] Install dependencies.
 

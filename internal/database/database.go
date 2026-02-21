@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/tinrab/emails/internal/models"
+	"github.com/my-org/emails-service/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

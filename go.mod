@@ -1,4 +1,4 @@
-module github.com/tinrab/emails
+module github.com/my-org/emails-service
 
 go 1.24.3
 

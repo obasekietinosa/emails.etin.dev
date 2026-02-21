@@ -6,9 +6,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
-	"github.com/tinrab/emails/internal/database"
-	"github.com/tinrab/emails/internal/handlers"
-	"github.com/tinrab/emails/internal/middleware"
+	"github.com/my-org/emails-service/internal/database"
+	"github.com/my-org/emails-service/internal/handlers"
+	"github.com/my-org/emails-service/internal/middleware"
 )
 
 func main() {
