@@ -7,28 +7,27 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
-	"egogo/internal/database"
 	"egogo/internal/middleware"
 	"egogo/internal/models"
 )
 
-func ListTemplates(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ListTemplates(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	var templates []models.Template
-	if result := database.DB.Where("user_id = ?", userID).Find(&templates); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	templates, err := h.Repo.ListTemplates(userID)
+	if err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	JSON(w, http.StatusOK, templates)
 }
 
-func CreateTemplate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateTemplate(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -54,15 +53,15 @@ func CreateTemplate(w http.ResponseWriter, r *http.Request) {
 		TriggerToken: uuid.New().String(),
 	}
 
-	if result := database.DB.Create(&template); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	if err := h.Repo.CreateTemplate(&template); err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	JSON(w, http.StatusCreated, template)
 }
 
-func GetTemplate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetTemplate(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -76,16 +75,16 @@ func GetTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var template models.Template
-	if result := database.DB.Where("id = ? AND user_id = ?", id, userID).First(&template); result.Error != nil {
-		ErrorJSON(w, http.StatusNotFound, result.Error)
+	template, err := h.Repo.GetTemplate(uint(id), userID)
+	if err != nil {
+		ErrorJSON(w, http.StatusNotFound, err)
 		return
 	}
 
 	JSON(w, http.StatusOK, template)
 }
 
-func UpdateTemplate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateTemplate(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -99,9 +98,9 @@ func UpdateTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var template models.Template
-	if result := database.DB.Where("id = ? AND user_id = ?", id, userID).First(&template); result.Error != nil {
-		ErrorJSON(w, http.StatusNotFound, result.Error)
+	template, err := h.Repo.GetTemplate(uint(id), userID)
+	if err != nil {
+		ErrorJSON(w, http.StatusNotFound, err)
 		return
 	}
 
@@ -120,15 +119,15 @@ func UpdateTemplate(w http.ResponseWriter, r *http.Request) {
 	template.Subject = input.Subject
 	template.Body = input.Body
 
-	if result := database.DB.Save(&template); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	if err := h.Repo.UpdateTemplate(template); err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	JSON(w, http.StatusOK, template)
 }
 
-func DeleteTemplate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteTemplate(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -142,8 +141,8 @@ func DeleteTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if result := database.DB.Where("id = ? AND user_id = ?", id, userID).Delete(&models.Template{}); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	if err := h.Repo.DeleteTemplate(uint(id), userID); err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 

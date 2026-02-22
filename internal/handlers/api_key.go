@@ -6,12 +6,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"egogo/internal/database"
 	"egogo/internal/middleware"
 	"egogo/internal/models"
 )
 
-func GenerateAPIKey(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GenerateAPIKey(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -40,24 +39,24 @@ func GenerateAPIKey(w http.ResponseWriter, r *http.Request) {
 		Name:   input.Name,
 	}
 
-	if result := database.DB.Create(&apiKey); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	if err := h.Repo.CreateAPIKey(&apiKey); err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	JSON(w, http.StatusCreated, apiKey)
 }
 
-func ListAPIKeys(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ListAPIKeys(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.UserContextKey).(uint)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	var keys []models.ApiKey
-	if result := database.DB.Where("user_id = ?", userID).Find(&keys); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	keys, err := h.Repo.ListAPIKeys(userID)
+	if err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 

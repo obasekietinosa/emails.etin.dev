@@ -4,15 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"egogo/internal/database"
 	"egogo/internal/models"
 	"egogo/internal/service"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthHandler struct{}
-
-func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -34,8 +31,8 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		Password: string(hashedPassword),
 	}
 
-	if result := database.DB.Create(&user); result.Error != nil {
-		ErrorJSON(w, http.StatusInternalServerError, result.Error)
+	if err := h.Repo.CreateUser(&user); err != nil {
+		ErrorJSON(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -48,7 +45,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	JSON(w, http.StatusCreated, map[string]string{"token": token})
 }
 
-func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -59,9 +56,10 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user models.User
-	if result := database.DB.Where("email = ?", input.Email).First(&user); result.Error != nil {
-		ErrorJSON(w, http.StatusUnauthorized, result.Error)
+	user, err := h.Repo.GetUserByEmail(input.Email)
+	if err != nil {
+		// Could be record not found or other error
+		ErrorJSON(w, http.StatusUnauthorized, err)
 		return
 	}
 
@@ -70,7 +68,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := service.GenerateToken(&user)
+	token, err := service.GenerateToken(user)
 	if err != nil {
 		ErrorJSON(w, http.StatusInternalServerError, err)
 		return

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_DSN=host=postgres user=postgres password=postgres dbname=egogo port=5432 sslmode=disable
+      - JWT_SECRET=devsecret
+      # SMTP_HOST=smtp.example.com
+      # SMTP_PORT=587
+      # SMTP_USER=user
+      # SMTP_PASS=pass
+      # FROM_EMAIL=noreply@example.com
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=egogo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./web
+      args:
+        - VITE_API_URL=/api
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
