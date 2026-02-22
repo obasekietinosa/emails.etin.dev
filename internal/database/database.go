@@ -3,7 +3,6 @@ package database
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"egogo/internal/models"
 	"gorm.io/driver/postgres"
@@ -12,12 +11,11 @@ import (
 
 var DB *gorm.DB
 
-func InitDB() error {
+func InitDB(dsn string) error {
 	var err error
-	dsn := os.Getenv("DB_DSN")
 
 	if dsn == "" {
-		return fmt.Errorf("DB_DSN environment variable is required")
+		return fmt.Errorf("DB_DSN is required")
 	}
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
